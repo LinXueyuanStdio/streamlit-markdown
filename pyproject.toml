@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "st-diff-viewer"
+version = "1.0.2"
+description = "A Streamlit component to display diff betoween two strings"
+authors = ["Xueyuan Lin <linxy59@mail2.sysu.eud.cn>"]
+readme = "README.md"
+packages = [{ include = "st_diff_viewer"}]
+
+license = "MIT"
+
+# Only include the out directory of the frontend
+# The order of the include/exclude lists is important!
+include = ["st_diff_viewer/frontend/out/**", "docs/**"]
+exclude = ["st_diff_viewer/frontend/*"]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.9.7 || >3.9.7,<4.0"
+streamlit = ">=0.63"
+
+[tool.poetry.group.dev.dependencies]
+watchdog = "^3.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
