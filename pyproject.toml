@@ -1,17 +1,17 @@
 [tool.poetry]
-name = "st-diff-viewer"
-version = "1.0.2"
-description = "A Streamlit component to display diff betoween two strings"
+name = "streamlit-markdown"
+version = "1.0.3"
+description = "A Streamlit component to display markdown, which supports table, code switch, LaTeX, mermaid, and more."
 authors = ["Xueyuan Lin <linxy59@mail2.sysu.eud.cn>"]
 readme = "README.md"
-packages = [{ include = "st_diff_viewer"}]
+packages = [{ include = "streamlit_markdown"}]
 
 license = "MIT"
 
 # Only include the out directory of the frontend
 # The order of the include/exclude lists is important!
-include = ["st_diff_viewer/frontend/out/**", "docs/**"]
-exclude = ["st_diff_viewer/frontend/*"]
+include = ["streamlit_markdown/frontend/out/**", "docs/**"]
+exclude = ["streamlit_markdown/frontend/*"]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.9.7 || >3.9.7,<4.0"

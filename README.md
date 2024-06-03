@@ -1,22 +1,29 @@
-# streamlit-diff-viewer
-git-like diff viewer for streamlit webapp
+# streamlit-markdown
+react-markdown for streamlit webapp
 
 ![](docs/head.png)
+
+- [x] streaming rendering of markdown text
+- [x] support for latex math
+- [x] support for mermaid diagrams
+- [x] support for code highlighting
+- [x] support for tables
+- [x] support for images
+- [x] support for links
 
 ## Installation
 
 ```bash
-pip install st-diff-viewer
+pip install streamlit-markdown
 ```
 
 ## Usage
 
 ```python
-from st_diff_viewer import diff_viewer
+from streamlit_markdown import streamlit_markdown
 
-old_text = "a = 0"
-new_text = "a = 1"
-diff_viewer(old_text, new_text, split_view=True)
+markdown_text = "$ y = f(x)$"
+streamlit_markdown(markdown_text)
 ```
 
 run example:
