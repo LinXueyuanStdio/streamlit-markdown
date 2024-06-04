@@ -2,6 +2,7 @@ import random
 import time
 import uuid
 import streamlit as st
+import requests
 
 from streamlit_markdown import st_markdown
 
@@ -38,7 +39,7 @@ sequenceDiagram
 ```
 
 ```latex
-F(x) = \int_{a}^{b} f(x) \, dx
+F(x) = \\int_{a}^{b} f(x) \\, dx
 ```
 
 行内数学公式 $y=f(x)$ 自变量为 $x$，因变量为 $y$。
@@ -115,6 +116,7 @@ a, b, c = st.columns(3)
 streaming = a.checkbox("Streaming", False)
 richContent = b.checkbox("Rich Content", True)
 theme_color = c.selectbox("Theme Color", ["blue", "orange", "green"])
+remote_streaming = a.checkbox("Remote Streaming", False)
 
 if not streaming:
     st_markdown(
@@ -123,26 +125,55 @@ if not streaming:
         theme_color=theme_color,
         key="content",
     )
-else:
+elif remote_streaming:
+    buffer = ""
+    for chunk in requests.get("http://localhost:8000", stream=True):
+        print(chunk)
+        buffer += chunk.decode()
+        with st.empty():
+            st_markdown(
+                buffer,
+                richContent=richContent,
+                theme_color=theme_color,
+            )
     # 1. bind to a socket
-    content_id = uuid.uuid4().hex
-    socket_url = f"ws://localhost:8000/content?id={content_id}"
+    # content_id = uuid.uuid4().hex
+    # socket_url = f"ws://localhost:8000/content?id={content_id}"
+    # st_markdown(
+    #     None,
+    #     richContent=richContent,
+    #     theme_color=theme_color,
+    #     key="content",
+    #     socket_url=socket_url + "&server=0",
+    # )
+    # 2. write to the socket
+    # from websocket import create_connection
+
+    # ws = create_connection(socket_url + "&server=1")
+    # length = 0
+    # while length < len(content):
+    #     next_length = length + random.randint(2, 10)
+    #     # ws.send({"content": content[length : next_length]})
+    #     ws.send_text(content[length : next_length])
+    #     length = next_length
+    #     time.sleep(0.1)
+    # ws.close()
+else:
+    if "n_chars" not in st.session_state:
+        st.session_state.n_chars = 1
+
     st_markdown(
-        None,
+        content[: st.session_state.n_chars],
         richContent=richContent,
         theme_color=theme_color,
         key="content",
-        socket_url=socket_url + "&server=0",
     )
-    # 2. write to the socket
-    from websocket import create_connection
 
-    ws = create_connection(socket_url + "&server=1")
-    length = 0
-    while length < len(content):
-        next_length = length + random.randint(2, 10)
-        # ws.send({"content": content[length : next_length]})
-        ws.send_text(content[length : next_length])
-        length = next_length
-        time.sleep(0.1)
-    ws.close()
+    # Simulate streaming
+    if st.session_state.n_chars < len(content):
+        st.session_state.n_chars += random.randint(1, 5)
+        time.sleep(0.05)
+        st.rerun()
+    else:
+        st.session_state.n_chars = 1
+        st.rerun()
