@@ -1,41 +1,20 @@
 import random
 import time
+import uuid
 import streamlit as st
 
-from streamlit_markdown import streamlit_markdown
-
+from streamlit_markdown import st_markdown
 
 markdown_text = """
 This is a table:
 
-| Vegetable | Description |
+| Title | Description |
 |-----------|-------------|
-| Carrot    | A crunchy, orange root vegetable that is rich in vitamins and minerals. It is commonly used in soups, salads, and as a snack. |
-| Broccoli  | A green vegetable with tightly packed florets that is high in fiber, vitamins, and antioxidants. It can be steamed, boiled, stir-fried, or roasted. |
-| Spinach   | A leafy green vegetable that is dense in nutrients like iron, calcium, and vitamins. It can be eaten raw in salads or cooked in various dishes. |
-| Bell Pepper | A colorful, sweet vegetable available in different colors such as red, yellow, and green. It is often used in stir-fries, salads, or stuffed recipes. |
-| Tomato    | A juicy fruit often used as a vegetable in culinary preparations. It comes in various shapes, sizes, and colors and is used in salads, sauces, and sandwiches. |
-| Cucumber   | A cool and refreshing vegetable with a high water content. It is commonly used in salads, sandwiches, or as a crunchy snack. |
-| Zucchini | A summer squash with a mild flavor and tender texture. It can be sautéed, grilled, roasted, or used in baking recipes. |
-| Cauliflower | A versatile vegetable that can be roasted, steamed, mashed, or used to make gluten-free alternatives like cauliflower rice or pizza crust. |
-| Green Beans | Long, slender pods that are low in calories and rich in vitamins. They can be steamed, stir-fried, or used in casseroles and salads. |
-| Potato | A starchy vegetable available in various varieties. It can be boiled, baked, mashed, or used in soups, fries, and many other dishes. |
+| text    | hello world |
+| math  | $y=f(x)$ |
+| reference  | cite[^1][^2] |
 
 This is a mermaid diagram:
-
-```mermaid
-gitGraph
-    commit
-    commit
-    branch develop
-    checkout develop
-    commit
-    commit
-    checkout main
-    merge develop
-    commit
-    commit
-```
 
 ```mermaid
 sequenceDiagram
@@ -59,7 +38,7 @@ sequenceDiagram
 ```
 
 ```latex
-\\[F(x) = \\int_{a}^{b} f(x) \\, dx\\]
+F(x) = \int_{a}^{b} f(x) \, dx
 ```
 
 行内数学公式 $y=f(x)$ 自变量为 $x$，因变量为 $y$。
@@ -128,40 +107,42 @@ This is a complex list:
 ###### Heading level 6
 
 > This is a blockquote.
+
 """
 
 content = st.text_area("Markdown", markdown_text, height=250)
-a, b, c, d = st.columns(4)
-streaming = d.checkbox("Streaming", False)
-partial = a.checkbox("Partial", False)
+a, b, c = st.columns(3)
+streaming = a.checkbox("Streaming", False)
 richContent = b.checkbox("Rich Content", True)
-background_color = c.selectbox("Background Color", ["blue", "orange", "green"])
+theme_color = c.selectbox("Theme Color", ["blue", "orange", "green"])
 
 if not streaming:
-    streamlit_markdown(
+    st_markdown(
         content,
-        partial=partial,
         richContent=richContent,
-        background_color=background_color,
+        theme_color=theme_color,
         key="content",
     )
 else:
-    if "n_chars" not in st.session_state:
-        st.session_state.n_chars = 1
-
-    streamlit_markdown(
-        content[: st.session_state.n_chars],
-        partial=st.session_state.n_chars < len(content),
+    # 1. bind to a socket
+    content_id = uuid.uuid4().hex
+    socket_url = f"ws://localhost:8000/content?id={content_id}"
+    st_markdown(
+        None,
         richContent=richContent,
-        background_color=background_color,
+        theme_color=theme_color,
         key="content",
+        socket_url=socket_url + "&server=0",
     )
+    # 2. write to the socket
+    from websocket import create_connection
 
-    # Simulate streaming
-    if st.session_state.n_chars < len(content):
-        st.session_state.n_chars += random.randint(1, 5)
-        time.sleep(0.05)
-        st.rerun()
-    else:
-        st.session_state.n_chars = 1
-        st.rerun()
+    ws = create_connection(socket_url + "&server=1")
+    length = 0
+    while length < len(content):
+        next_length = length + random.randint(2, 10)
+        # ws.send({"content": content[length : next_length]})
+        ws.send_text(content[length : next_length])
+        length = next_length
+        time.sleep(0.1)
+    ws.close()
