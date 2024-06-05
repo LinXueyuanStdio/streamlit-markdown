@@ -1,3 +1,4 @@
+import json
 import os
 from typing import List, Optional, Union
 
@@ -18,13 +19,16 @@ if _RELEASE:
 
     _markdown = components.declare_component(COMPONENT_NAME, path=build_dir)
 else:
-    _markdown = components.declare_component(COMPONENT_NAME, url="http://localhost:35335/component/streamlit_markdown.streamlit_markdown")
+    _markdown = components.declare_component(
+        COMPONENT_NAME,
+        url="http://localhost:35335/component/streamlit_markdown.streamlit_markdown",
+    )
 
 
 def st_markdown(
     content: str,
     richContent: bool = True,
-    background_color: Literal["blue", "orange", "green"] = "green",
+    theme_color: Literal["blue", "orange", "green"] = "green",
     key=None,
     **kwargs,
 ):
@@ -37,7 +41,7 @@ def st_markdown(
         The markdown content to be displayed
     richContent: bool
         Whether to display rich content
-    background_color: Literal["blue", "orange", "green"]
+    theme_color: Literal["blue", "orange", "green"]
         The background color of the component
     key: Optional[str]
         An optional key that makes the component unique
@@ -45,7 +49,7 @@ def st_markdown(
     Returns: current text that already rendered to markdown
     """
     return _markdown(
-        background_color=background_color,
+        theme_color=theme_color,
         content=content,
         richContent=richContent,
         key=key,
