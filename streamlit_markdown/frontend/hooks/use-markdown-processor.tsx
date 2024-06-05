@@ -32,7 +32,7 @@ import { HtmlGenerator, parse } from "latex.js";
 import "katex/dist/katex.min.css"; // `rehype-katex` does not import the CSS for you;
 // import "highlight.js/styles/base16/green-screen.css";
 // import "@/styles/highlighting.green-screen.min.css";
-export const ANCHOR_CLASS_NAME = "font-semibold underline text-emerald-700 underline-offset-[2px] decoration-1 hover:text-emerald-800 transition-colors";
+export const ANCHOR_CLASS_NAME = "font-semibold underline underline-offset-[2px] decoration-1 transition-colors";
 
 // Mixing arbitrary Markdown + Capsize leads to lots of challenges
 // with paragraphs and list items. This replaces paragraphs inside
@@ -53,27 +53,30 @@ const rehypeListItemParagraphToDiv: Plugin<[], Root> = () => {
   };
 };
 export type ThemeColor = "blue" | "orange" | "green";
-export type ThemeScope = "bg" | "border" | "text" | "hover:bg";
+export type ThemeScope = "bg" | "border" | "text" | "hover:bg" | "hover:text";
 
-export function classNameByTheme(theme_color: ThemeColor, theme_scope: Array<ThemeScope> = ["bg", "border", "text", "hover:bg"]) {
+export function classNameByTheme(theme_color: ThemeColor, theme_scope: Array<ThemeScope> = ["bg", "border", "text"]) {
   const theme2scope = {
     "orange": {
       "bg": "bg-orange-100",
       "border": "border-orange-200",
       "text": "text-orange-900",
-      "hover:bg": "hover:bg-orange-200"
+      "hover:bg": "hover:bg-orange-200",
+      "hover:text": "hover:text-orange-800"
     },
     "green": {
       "bg": "bg-green-50",
       "border": "border-green-200",
       "text": "text-green-900",
-      "hover:bg": "hover:bg-green-200"
+      "hover:bg": "hover:bg-green-200",
+      "hover:text": "hover:text-green-800"
     },
     "blue": {
       "bg": "bg-blue-50",
       "border": "border-blue-200",
       "text": "text-blue-900",
-      "hover:bg": "hover:bg-blue-200"
+      "hover:bg": "hover:bg-blue-200",
+      "hover:text": "hover:text-blue-800"
     }
   }
   return theme_scope.map((s) => {
@@ -104,7 +107,10 @@ export const useMarkdownProcessor = (content: string, theme_color: ThemeColor = 
               href={href}
               target="_blank"
               rel="noreferrer"
-              className={ANCHOR_CLASS_NAME}
+              className={classNames(
+                ANCHOR_CLASS_NAME,
+                classNameByTheme(theme_color, ["text", "hover:text"])
+              )}
             >
               {children}
             </a>
@@ -294,10 +300,17 @@ export const useMarkdownProcessor = (content: string, theme_color: ThemeColor = 
         },
       })
       .processSync(content).result;
-  }, [content]);
+  }, [content, theme_color]);
 };
 
 const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme_color: ThemeColor = "green") => {
+  const isMermaid = className ? className.includes("language-mermaid") : false;
+  const isLatex = className ? className.includes("language-latex"): false;
+
+  // show preview by default
+  const [showMermaidPreview, setShowMermaidPreview] = useState(isMermaid);
+  const [showLatexPreview, setShowLatexPreview] = useState(isLatex);
+
   const [copied, setCopied] = useState(false);
   const ref = useRef<HTMLElement>(null);
 
@@ -311,13 +324,6 @@ const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme
   // Highlight.js adds a `className` so this is a hack to detect if the code block
   // is a language block wrapped in a `pre` tag.
   if (className) {
-    const isMermaid = className.includes("language-mermaid");
-    const isLatex = className.includes("language-latex");
-
-    // show preview by default
-    const [showMermaidPreview, setShowMermaidPreview] = useState(isMermaid);
-    const [showLatexPreview, setShowLatexPreview] = useState(isLatex);
-
     return (
       <>
         {
@@ -481,7 +487,10 @@ const Mermaid = ({ content, theme_color = "green" }: { content: string, theme_co
         Unable to render this diagram. Try copying it into the{" "}
         <Link
           href="https://mermaid.live/edit"
-          className={ANCHOR_CLASS_NAME}
+          className={classNames(
+            ANCHOR_CLASS_NAME,
+            classNameByTheme(theme_color, ["text", "hover:text"])
+          )}
           target="_blank"
         >
           Mermaid Live Editor

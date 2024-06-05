@@ -1,7 +1,7 @@
 # streamlit-markdown
 react-markdown for streamlit webapp
 
-![](docs/head.png)
+![](./docs/head.png)
 
 - [x] streaming rendering of markdown text
 - [x] support for latex math
@@ -20,10 +20,10 @@ pip install streamlit-markdown
 ## Usage
 
 ```python
-from streamlit_markdown import streamlit_markdown
+from streamlit_markdown import st_markdown
 
 markdown_text = "$ y = f(x)$"
-streamlit_markdown(markdown_text)
+st_markdown(markdown_text)
 ```
 
 run example:
@@ -32,7 +32,7 @@ run example:
 streamlit run example.py
 ```
 
-![img.png](docs/img.png)
+![img.png](./docs/img.png)
 
 ## Buiding from source
 
