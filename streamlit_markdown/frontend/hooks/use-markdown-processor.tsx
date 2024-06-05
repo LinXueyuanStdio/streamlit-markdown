@@ -1,7 +1,8 @@
 import { classNames } from "@/libs/class-names";
 import { CircleNotch, MathOperations, CheckFat, Copy, FlowArrow, Code } from "@phosphor-icons/react";
 import { Root } from "hast";
-import "highlight.js/styles/green-screen.css";
+// import "highlight.js/styles/green-screen.css";
+// import "https://unpkg.com/browse/@highlightjs/cdn-assets@11.6.0/styles/base16/green-screen.min.css";
 import mermaid from "mermaid";
 import Link from "next/link";
 import {
