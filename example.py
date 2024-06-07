@@ -14,8 +14,7 @@ st.title("streamlit-markdown")
 
 left, right = st.columns(2)
 with left:
-    a, b, c = st.columns(3)
-    streaming = a.radio(
+    streaming = st.radio(
         "Streaming",
         [
             "static content",
@@ -24,8 +23,8 @@ with left:
         ],
         index=0,
     )
-    richContent = b.checkbox("Rich Content", True)
-    theme_color = c.selectbox("Theme Color", ["blue", "orange", "green"])
+    richContent = st.checkbox("Rich Content", True)
+    theme_color = st.selectbox("Theme Color", ["green", "blue", "orange"])
     content = st.text_area("Markdown", TEST_MARKDOWN_TEXT, height=480)
 with right:
     if streaming == "streaming from server (built with FastAPI)":

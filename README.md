@@ -2,15 +2,11 @@
 
 react-markdown with streaming support for streamlit webapp
 
-![](./docs/head.png)
+![](./docs/screenshot.png)
 
 - [x] streaming rendering of markdown text
-- [x] support for latex math
-- [x] support for mermaid diagrams
-- [x] support for code highlighting
-- [x] support for tables
-- [x] support for images
-- [x] support for links
+- [x] support for latex math, mermaid diagrams, code highlighting
+- [x] support for tables, images, links
 
 ## Installation
 
@@ -65,7 +61,8 @@ run example:
 streamlit run example.py
 ```
 
-![img.png](./docs/img.png)
+![img.png](./docs/a.png)
+![img.png](./docs/b.png)
 
 ## Buiding from source
 
