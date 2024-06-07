@@ -1,5 +1,6 @@
 # streamlit-markdown
-react-markdown for streamlit webapp
+
+react-markdown with streaming support for streamlit webapp
 
 ![](./docs/head.png)
 
@@ -19,11 +20,43 @@ pip install streamlit-markdown
 
 ## Usage
 
+static content:
+
 ```python
 from streamlit_markdown import st_markdown
 
 markdown_text = "$ y = f(x)$"
 st_markdown(markdown_text)
+```
+
+streaming content:
+
+```python
+from streamlit_markdown import st_streaming_markdown
+
+markdown_text = "$ y = f(x)$"
+def token_stream():
+    for token in markdown_text:
+        yeild token
+st_streaming_markdown(token_stream, key="token_stream") # key must be set to prevent re-rendering
+```
+
+combined streaming content:
+
+```python
+from streamlit_markdown import st_streaming_markdown
+
+markdown_text = "$ y = f(x)$"
+def token_stream():
+    import random
+    for token in markdown_text:
+        if random.rand() > 0.5:
+            yeild token
+        else:
+            def callable_token():
+                return token
+            yeild callable_token
+st_streaming_markdown(token_stream, key="token_stream") # key must be set to prevent re-rendering
 ```
 
 run example:

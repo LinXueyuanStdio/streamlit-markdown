@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "streamlit-markdown"
-version = "1.0.3"
+version = "1.0.4"
 description = "A Streamlit component to display markdown, which supports table, code switch, LaTeX, mermaid, and more."
 authors = ["Xueyuan Lin <linxy59@mail2.sysu.eud.cn>"]
 readme = "README.md"

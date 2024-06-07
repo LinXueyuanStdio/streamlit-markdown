@@ -160,4 +160,3 @@ cython_debug/
 #.idea/
 
 yarn.lock
-streamlit_markdown/frontend/out/**
