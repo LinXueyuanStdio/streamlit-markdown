@@ -2,13 +2,15 @@
 
 react-markdown with streaming support for streamlit webapp.
 
-![](./docs/screenshot.png)
+![](./docs/streamlit-markdown.gif)
 
 - [x] streaming rendering of markdown text
 - [x] support for latex math, mermaid diagrams, code highlighting
 - [x] support for tables, images, links
 
 > Have a try at https://streaming-markdown.streamlit.app/
+
+![](./docs/screenshot.png)
 
 ## Installation
 
