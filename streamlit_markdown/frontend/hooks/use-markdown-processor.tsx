@@ -25,6 +25,7 @@ import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 import { Plugin, unified } from "unified";
 import { visit } from "unist-util-visit";
+import { Streamlit } from "streamlit-component-lib"
 // @ts-expect-error
 import { HtmlGenerator, parse } from "latex.js";
 // import "node_modules/latex.js/dist/css/base.css"
@@ -52,9 +53,9 @@ const rehypeListItemParagraphToDiv: Plugin<[], Root> = () => {
     return tree;
   };
 };
-export type ThemeColor = "blue" | "orange" | "green";
+export type ThemeColor = "blue" | "orange" | "green" | "red" | "purple" | "pink" | "indigo" | "yellow" | "teal" | "cyan" | "gray" | "slate" | "dark" | "light" | "null";
 export type ThemeScope = "bg" | "border" | "text" | "hover:bg" | "hover:text";
-
+export type MermaidTheme = string | 'default' | 'forest' | 'dark' | 'neutral' | 'null';
 export function classNameByTheme(theme_color: ThemeColor, theme_scope: Array<ThemeScope> = ["bg", "border", "text"]) {
   const theme2scope = {
     "orange": {
@@ -77,6 +78,90 @@ export function classNameByTheme(theme_color: ThemeColor, theme_scope: Array<The
       "text": "text-blue-900",
       "hover:bg": "hover:bg-blue-200",
       "hover:text": "hover:text-blue-800"
+    },
+    "red": {
+      "bg": "bg-red-50",
+      "border": "border-red-200",
+      "text": "text-red-900",
+      "hover:bg": "hover:bg-red-200",
+      "hover:text": "hover:text-red-800"
+    },
+    "purple": {
+      "bg": "bg-purple-50",
+      "border": "border-purple-200",
+      "text": "text-purple-900",
+      "hover:bg": "hover:bg-purple-200",
+      "hover:text": "hover:text-purple-800"
+    },
+    "pink": {
+      "bg": "bg-pink-50",
+      "border": "border-pink-200",
+      "text": "text-pink-900",
+      "hover:bg": "hover:bg-pink-200",
+      "hover:text": "hover:text-pink-800"
+    },
+    "indigo": {
+      "bg": "bg-indigo-50",
+      "border": "border-indigo-200",
+      "text": "text-indigo-900",
+      "hover:bg": "hover:bg-indigo-200",
+      "hover:text": "hover:text-indigo-800"
+    },
+    "yellow": {
+      "bg": "bg-yellow-50",
+      "border": "border-yellow-200",
+      "text": "text-yellow-900",
+      "hover:bg": "hover:bg-yellow-200",
+      "hover:text": "hover:text-yellow-800"
+    },
+    "teal": {
+      "bg": "bg-teal-50",
+      "border": "border-teal-200",
+      "text": "text-teal-900",
+      "hover:bg": "hover:bg-teal-200",
+      "hover:text": "hover:text-teal-800"
+    },
+    "cyan": {
+      "bg": "bg-cyan-50",
+      "border": "border-cyan-200",
+      "text": "text-cyan-900",
+      "hover:bg": "hover:bg-cyan-200",
+      "hover:text": "hover:text-cyan-800"
+    },
+    "gray": {
+      "bg": "bg-gray-50",
+      "border": "border-gray-200",
+      "text": "text-gray-900",
+      "hover:bg": "hover:bg-gray-200",
+      "hover:text": "hover:text-gray-800"
+    },
+    "slate": {
+      "bg": "bg-slate-50",
+      "border": "border-slate-200",
+      "text": "text-slate-900",
+      "hover:bg": "hover:bg-slate-200",
+      "hover:text": "hover:text-slate-800"
+    },
+    "dark": {
+      "bg": "bg-gray-900",
+      "border": "border-gray-800",
+      "text": "text-gray-100",
+      "hover:bg": "hover:bg-gray-800",
+      "hover:text": "hover:text-gray-100"
+    },
+    "light": {
+      "bg": "bg-white",
+      "border": "border-gray-200",
+      "text": "text-gray-900",
+      "hover:bg": "hover:bg-gray-100",
+      "hover:text": "hover:text-gray-900"
+    },
+    "null": {
+      "bg": "",
+      "border": "",
+      "text": "",
+      "hover:bg": "hover:bg-gray-100",
+      "hover:text": "hover:text-gray-900"
     }
   }
   return theme_scope.map((s) => {
@@ -84,10 +169,15 @@ export function classNameByTheme(theme_color: ThemeColor, theme_scope: Array<The
   }).join(" ");
 }
 
-export const useMarkdownProcessor = (content: string, theme_color: ThemeColor = "green") => {
+export const useMarkdownProcessor = (
+  content: string,
+  theme_color: ThemeColor = "green",
+  mermaid_theme: MermaidTheme = "default",
+  mermaid_theme_CSS: string | undefined = undefined,
+) => {
   useEffect(() => {
-    mermaid.initialize({ startOnLoad: false, theme: "forest" });
-  }, []);
+    mermaid.initialize({ startOnLoad: false, theme: mermaid_theme, themeCSS: mermaid_theme_CSS });
+  }, [mermaid_theme, mermaid_theme_CSS]);
 
   return useMemo(() => {
     return unified()
@@ -305,7 +395,7 @@ export const useMarkdownProcessor = (content: string, theme_color: ThemeColor = 
 
 const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme_color: ThemeColor = "green") => {
   const isMermaid = className ? className.includes("language-mermaid") : false;
-  const isLatex = className ? className.includes("language-latex"): false;
+  const isLatex = className ? className.includes("language-latex") : false;
 
   // show preview by default
   const [showMermaidPreview, setShowMermaidPreview] = useState(isMermaid);
@@ -429,6 +519,7 @@ const Latex = ({ content, theme_color = "green" }: { content: string, theme_colo
       console.error(error);
       setDiagram(false);
     }
+    Streamlit.setFrameHeight()
   }, [content]);
 
   if (diagram === true) {
@@ -467,6 +558,7 @@ const Mermaid = ({ content, theme_color = "green" }: { content: string, theme_co
       } else {
         setDiagram(false);
       }
+      Streamlit.setFrameHeight()
     };
     render();
   }, [content]);

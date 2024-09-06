@@ -68,7 +68,7 @@ streamlit run example.py
 ![img.png](./docs/a.png)
 ![img.png](./docs/b.png)
 
-## Buiding from source
+## Building from source
 
 ### Prerequisites
 

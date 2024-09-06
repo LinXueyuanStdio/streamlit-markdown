@@ -1,7 +1,7 @@
 import os
 import inspect
 import time
-from typing import Literal, Any, Callable, Generator, Literal, Union
+from typing import Literal, Any, Callable, Generator, Literal, Optional, Union
 
 import streamlit as st
 from streamlit import _main
@@ -29,11 +29,15 @@ else:
         url="http://localhost:35335/component/streamlit_markdown.streamlit_markdown",
     )
 
+GLOBAL_THEME_COLOR = Literal["blue", "orange", "green"]
+MERMAID_THEME = Literal["default", "forest", "dark", "neutral", "base"]
 
 def st_markdown(
     content: str,
     richContent: bool = True,
-    theme_color: Literal["blue", "orange", "green"] = "green",
+    theme_color: GLOBAL_THEME_COLOR = "green",
+    mermaid_theme: MERMAID_THEME = "forest",
+    mermaid_theme_CSS: Optional[str] = None,
     key=None,
     default: Any = None,
     **kwargs,
@@ -47,8 +51,12 @@ def st_markdown(
         The markdown content to be displayed
     richContent: bool
         Whether to display rich content
-    theme_color: Literal["blue", "orange", "green"]
+    theme_color: GLOBAL_THEME_COLOR
         The background color of the component
+    mermaid_theme: MERMAID_THEME
+        The theme of the mermaid diagram
+    mermaid_theme_CSS: Optional[str]
+        The CSS string to style the mermaid diagram. If set, mermaid_theme will be ignored
     key: Optional[str]
         An optional key that makes the component unique
 
@@ -58,6 +66,8 @@ def st_markdown(
         theme_color=theme_color,
         content=content,
         richContent=richContent,
+        mermaid_theme=mermaid_theme,
+        mermaid_theme_CSS=mermaid_theme_CSS,
         key=key,
         default=default,
         **kwargs,
@@ -67,7 +77,9 @@ def st_markdown(
 def st_hack_markdown(
     content: str,
     richContent: bool = True,
-    theme_color: Literal["blue", "orange", "green"] = "green",
+    theme_color: GLOBAL_THEME_COLOR = "green",
+    mermaid_theme: MERMAID_THEME = "forest",
+    mermaid_theme_CSS: Optional[str] = None,
     key=None,
     default: Any = None,
     **kwargs,
@@ -80,13 +92,17 @@ def st_hack_markdown(
     kwargs["content"] = content
     kwargs["richContent"] = richContent
     kwargs["theme_color"] = theme_color
+    kwargs["mermaid_theme"] = mermaid_theme
+    kwargs["mermaid_theme_CSS"] = mermaid_theme_CSS
     return st_hack_component(_main, _markdown, key, default, **kwargs)
 
 
 def st_streaming_markdown(
     token_stream: Union[Generator[str, str, str], Callable[[], str], str],
     richContent: bool = True,
-    theme_color: Literal["blue", "orange", "green"] = "green",
+    theme_color: GLOBAL_THEME_COLOR = "green",
+    mermaid_theme: MERMAID_THEME = "forest",
+    mermaid_theme_CSS: Optional[str] = None,
     key=None,
     default: Any = None,
     **kwargs,
@@ -103,6 +119,8 @@ def st_streaming_markdown(
                 token_stream,
                 richContent,
                 theme_color,
+                mermaid_theme,
+                mermaid_theme_CSS,
                 key=key,
                 default=default,
                 **kwargs,
@@ -125,6 +143,8 @@ def st_streaming_markdown(
                     content,
                     richContent,
                     theme_color,
+                    mermaid_theme,
+                    mermaid_theme_CSS,
                     key=key,
                     default=default,
                     **kwargs,

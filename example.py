@@ -24,7 +24,9 @@ with left:
         index=0,
     )
     richContent = st.checkbox("Rich Content", True)
-    theme_color = st.selectbox("Theme Color", ["green", "blue", "orange"])
+    theme_color = st.selectbox("Theme Color", ["green", "blue", "orange", "red" , "purple" , "pink" , "indigo" , "yellow" , "teal" , "cyan" , "gray" , "slate" , "dark" , "light" , "null"])
+    mermaid_theme = st.selectbox("Mermaid Theme", ["default", "forest", "dark", "neutral", "null"])
+    mermaid_theme_CSS = st.text_area("Mermaid Theme CSS", height=120)
     content = st.text_area("Markdown", TEST_MARKDOWN_TEXT, height=480)
 with right:
     if streaming == "streaming from server (built with FastAPI)":
@@ -44,6 +46,8 @@ with right:
             remote_token_stream(),
             richContent=richContent,
             theme_color=theme_color,
+            mermaid_theme=mermaid_theme,
+            mermaid_theme_CSS=mermaid_theme_CSS,
             key="streaming_from_server",
         )
     if streaming == "streaming content":
@@ -52,6 +56,8 @@ with right:
             token_stream,
             richContent=richContent,
             theme_color=theme_color,
+            mermaid_theme=mermaid_theme,
+            mermaid_theme_CSS=mermaid_theme_CSS,
             key="streaming_content",
         )
     else:
@@ -59,6 +65,8 @@ with right:
             content,
             richContent=richContent,
             theme_color=theme_color,
+            mermaid_theme=mermaid_theme,
+            mermaid_theme_CSS=mermaid_theme_CSS,
             key="content",
         )
 
