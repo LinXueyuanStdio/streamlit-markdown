@@ -13,6 +13,8 @@ function StreamlitMarkdown() {
         richContent={args.richContent}
         mermaid_theme_CSS={args.mermaid_theme_CSS}
         mermaid_theme={args.mermaid_theme}
+        custom_color={args.custom_color}
+        custom_css={args.custom_css}
       />
     </div>
   );

@@ -206,5 +206,6 @@ def register_widget_from_metadata(
         ctx.widget_ids_this_run.add(widget_id)
 
     # Save the widget metadata for cached result replay
-    caching.save_widget_metadata(metadata)
+    if hasattr(caching, "save_widget_metadata"):
+        caching.save_widget_metadata(metadata)
     return ctx.session_state.register_widget(metadata, user_key)

@@ -1,7 +1,7 @@
 import os
 import inspect
 import time
-from typing import Literal, Any, Callable, Generator, Literal, Optional, Union
+from typing import Literal, Any, Callable, Generator, Literal, Optional, Union, TypedDict
 
 import streamlit as st
 from streamlit import _main
@@ -29,8 +29,38 @@ else:
         url="http://localhost:35335/component/streamlit_markdown.streamlit_markdown",
     )
 
-GLOBAL_THEME_COLOR = Literal["blue", "orange", "green"]
+GLOBAL_THEME_COLOR = Literal["blue", "orange", "green", "red", "purple", "pink", "indigo", "yellow", "teal", "cyan", "gray", "slate", "dark", "light", "null", "custom"]
 MERMAID_THEME = Literal["default", "forest", "dark", "neutral", "base"]
+class CUSTOM_COLOR(TypedDict):
+    bg: str = ""
+    border: str = ""
+    text: str = ""
+    hover_bg: str = ""
+    hover_text: str = ""
+class CUSTOM_CSS(TypedDict):
+    a_class: str = ""
+    h1_class: str = ""
+    h2_class: str = ""
+    h3_class: str = ""
+    h4_class: str = ""
+    h5_class: str = ""
+    h6_class: str = ""
+    p_class: str = ""
+    strong_class: str = ""
+    em_class: str = ""
+    code_class: str = ""
+    code_button_class: str = ""
+    code_latex_class: str = ""
+    code_mermaid_class: str = ""
+    pre_class: str = ""
+    ul_class: str = ""
+    ol_class: str = ""
+    li_class: str = ""
+    table_class: str = ""
+    thead_class: str = ""
+    th_class: str = ""
+    td_class: str = ""
+    blockquote_class: str = ""
 
 def st_markdown(
     content: str,
@@ -38,6 +68,8 @@ def st_markdown(
     theme_color: GLOBAL_THEME_COLOR = "green",
     mermaid_theme: MERMAID_THEME = "forest",
     mermaid_theme_CSS: Optional[str] = None,
+    custom_color: Optional[CUSTOM_COLOR] = None,
+    custom_css: Optional[CUSTOM_CSS] = None,
     key=None,
     default: Any = None,
     **kwargs,
@@ -57,17 +89,59 @@ def st_markdown(
         The theme of the mermaid diagram
     mermaid_theme_CSS: Optional[str]
         The CSS string to style the mermaid diagram. If set, mermaid_theme will be ignored
+    custom_color: Optional[dict]
+        Custom color for the component
+    custom_css: Optional[dict]
+        Custom CSS for the component
     key: Optional[str]
         An optional key that makes the component unique
 
     Returns: current text that already rendered to markdown
     """
+    if not mermaid_theme_CSS:
+        mermaid_theme_CSS = ""
+    if not custom_color:
+        custom_color = {
+            "bg": "bg-gray-100",
+            "border": "border-gray-300",
+            "text": "text-green-900",
+            "hover_bg": "hover:bg-gray-200",
+            "hover_text": "hover:text-gray-900",
+        }
+    if not custom_css:
+        custom_css = {
+            "a_class": "",
+            "h1_class": "",
+            "h2_class": "",
+            "h3_class": "",
+            "h4_class": "",
+            "h5_class": "",
+            "h6_class": "",
+            "p_class": "",
+            "strong_class": "",
+            "em_class": "",
+            "code_class": "",
+            "code_button_class": "",
+            "code_latex_class": "",
+            "code_mermaid_class": "",
+            "pre_class": "",
+            "ul_class": "",
+            "ol_class": "",
+            "li_class": "",
+            "table_class": "",
+            "thead_class": "",
+            "th_class": "",
+            "td_class": "",
+            "blockquote_class": "",
+        }
     return _markdown(
         theme_color=theme_color,
         content=content,
         richContent=richContent,
         mermaid_theme=mermaid_theme,
         mermaid_theme_CSS=mermaid_theme_CSS,
+        custom_color=custom_color,
+        custom_css=custom_css,
         key=key,
         default=default,
         **kwargs,
@@ -80,6 +154,8 @@ def st_hack_markdown(
     theme_color: GLOBAL_THEME_COLOR = "green",
     mermaid_theme: MERMAID_THEME = "forest",
     mermaid_theme_CSS: Optional[str] = None,
+    custom_color: Optional[CUSTOM_COLOR] = None,
+    custom_css: Optional[CUSTOM_CSS] = None,
     key=None,
     default: Any = None,
     **kwargs,
@@ -89,11 +165,50 @@ def st_hack_markdown(
     Args and Returns:
         same as st_markdown
     """
+
+    if not mermaid_theme_CSS:
+        mermaid_theme_CSS = ""
+    if not custom_color:
+        custom_color = {
+            "bg": "bg-gray-100",
+            "border": "border-gray-300",
+            "text": "text-gray-900",
+            "hover_bg": "hover:bg-gray-200",
+            "hover_text": "hover:text-gray-900",
+        }
+    if not custom_css:
+        custom_css = {
+            "a_class": "",
+            "h1_class": "",
+            "h2_class": "",
+            "h3_class": "",
+            "h4_class": "",
+            "h5_class": "",
+            "h6_class": "",
+            "p_class": "",
+            "strong_class": "",
+            "em_class": "",
+            "code_class": "",
+            "code_button_class": "",
+            "code_latex_class": "",
+            "code_mermaid_class": "",
+            "pre_class": "",
+            "ul_class": "",
+            "ol_class": "",
+            "li_class": "",
+            "table_class": "",
+            "thead_class": "",
+            "th_class": "",
+            "td_class": "",
+            "blockquote_class": "",
+        }
     kwargs["content"] = content
     kwargs["richContent"] = richContent
     kwargs["theme_color"] = theme_color
     kwargs["mermaid_theme"] = mermaid_theme
     kwargs["mermaid_theme_CSS"] = mermaid_theme_CSS
+    kwargs["custom_color"] = custom_color
+    kwargs["custom_css"] = custom_css
     return st_hack_component(_main, _markdown, key, default, **kwargs)
 
 
@@ -103,6 +218,8 @@ def st_streaming_markdown(
     theme_color: GLOBAL_THEME_COLOR = "green",
     mermaid_theme: MERMAID_THEME = "forest",
     mermaid_theme_CSS: Optional[str] = None,
+    custom_color: Optional[CUSTOM_COLOR] = None,
+    custom_css: Optional[CUSTOM_CSS] = None,
     key=None,
     default: Any = None,
     **kwargs,
@@ -121,6 +238,8 @@ def st_streaming_markdown(
                 theme_color,
                 mermaid_theme,
                 mermaid_theme_CSS,
+                custom_color,
+                custom_css,
                 key=key,
                 default=default,
                 **kwargs,
@@ -145,6 +264,8 @@ def st_streaming_markdown(
                     theme_color,
                     mermaid_theme,
                     mermaid_theme_CSS,
+                    custom_color,
+                    custom_css,
                     key=key,
                     default=default,
                     **kwargs,

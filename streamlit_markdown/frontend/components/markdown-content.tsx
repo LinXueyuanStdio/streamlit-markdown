@@ -1,6 +1,6 @@
 import React from "react";
 import { classNames } from "@/libs/class-names";
-import { useMarkdownProcessor, ThemeColor, MermaidTheme, classNameByTheme } from "@/hooks/use-markdown-processor";
+import { useMarkdownProcessor, ThemeColor, MermaidTheme, CustomColor, CustomCSS, classNameByTheme } from "@/hooks/use-markdown-processor";
 
 interface MarkdownContentProps {
   theme_color?: ThemeColor;
@@ -8,6 +8,8 @@ interface MarkdownContentProps {
   richContent?: boolean;
   mermaid_theme?: MermaidTheme;
   mermaid_theme_CSS?: string;
+  custom_color: CustomColor;
+  custom_css: CustomCSS;
 }
 
 function MarkdownContent({
@@ -16,8 +18,16 @@ function MarkdownContent({
   richContent = true,
   mermaid_theme = "forest",
   mermaid_theme_CSS = "",
+  custom_color = {} as CustomColor,
+  custom_css = {} as CustomCSS,
 }: MarkdownContentProps): JSX.Element {
-  const markdown_content = useMarkdownProcessor(content, theme_color, mermaid_theme, mermaid_theme_CSS);
+  console.log("content", content);
+  console.log("theme_color", theme_color);
+  console.log("mermaid_theme", mermaid_theme);
+  console.log("mermaid_theme_CSS", mermaid_theme_CSS);
+  console.log("custom_color", custom_color);
+  console.log("custom_css", custom_css);
+  const markdown_content = useMarkdownProcessor(content, theme_color, mermaid_theme, mermaid_theme_CSS, custom_color, custom_css);
 
   return (
     <div

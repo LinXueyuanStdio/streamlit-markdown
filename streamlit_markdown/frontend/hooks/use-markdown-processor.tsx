@@ -53,115 +53,156 @@ const rehypeListItemParagraphToDiv: Plugin<[], Root> = () => {
     return tree;
   };
 };
-export type ThemeColor = "blue" | "orange" | "green" | "red" | "purple" | "pink" | "indigo" | "yellow" | "teal" | "cyan" | "gray" | "slate" | "dark" | "light" | "null";
-export type ThemeScope = "bg" | "border" | "text" | "hover:bg" | "hover:text";
+export type ThemeColor = "blue" | "orange" | "green" | "red" | "purple" | "pink" | "indigo" | "yellow" | "teal" | "cyan" | "gray" | "slate" | "dark" | "light" | "null" | "custom";
+export type ThemeScope = "bg" | "border" | "text" | "hover_bg" | "hover_text";
 export type MermaidTheme = string | 'default' | 'forest' | 'dark' | 'neutral' | 'null';
-export function classNameByTheme(theme_color: ThemeColor, theme_scope: Array<ThemeScope> = ["bg", "border", "text"]) {
+export type CustomColor = {
+  bg: string;
+  border: string;
+  text: string;
+  hover_bg: string;
+  hover_text: string;
+}
+
+export type CustomCSS = {
+  a_class: string,
+  h1_class: string,
+  h2_class: string,
+  h3_class: string,
+  h4_class: string,
+  h5_class: string,
+  h6_class: string,
+  p_class: string,
+  strong_class: string,
+  em_class: string,
+  code_class: string,
+  code_button_class: string,
+  code_latex_class: string,
+  code_mermaid_class: string,
+  pre_class: string,
+  ul_class: string,
+  ol_class: string,
+  li_class: string,
+  table_class: string,
+  thead_class: string,
+  th_class: string,
+  td_class: string,
+  blockquote_class: string,
+}
+
+export function classNameByTheme(theme_color: ThemeColor, theme_scope: Array<ThemeScope> = ["bg", "border", "text"], custom_colors: CustomColor = {
+  "bg": "",
+  "border": "",
+  "text": "",
+  "hover_bg": "hover:bg-gray-100",
+  "hover_text": "hover:text-gray-900"
+}) {
   const theme2scope = {
+    "custom": custom_colors,
     "orange": {
       "bg": "bg-orange-100",
       "border": "border-orange-200",
       "text": "text-orange-900",
-      "hover:bg": "hover:bg-orange-200",
-      "hover:text": "hover:text-orange-800"
+      "hover_bg": "hover:bg-orange-200",
+      "hover_text": "hover:text-orange-800"
     },
     "green": {
       "bg": "bg-green-50",
       "border": "border-green-200",
       "text": "text-green-900",
-      "hover:bg": "hover:bg-green-200",
-      "hover:text": "hover:text-green-800"
+      "hover_bg": "hover:bg-green-200",
+      "hover_text": "hover:text-green-800"
     },
     "blue": {
       "bg": "bg-blue-50",
       "border": "border-blue-200",
       "text": "text-blue-900",
-      "hover:bg": "hover:bg-blue-200",
-      "hover:text": "hover:text-blue-800"
+      "hover_bg": "hover:bg-blue-200",
+      "hover_text": "hover:text-blue-800"
     },
     "red": {
       "bg": "bg-red-50",
       "border": "border-red-200",
       "text": "text-red-900",
-      "hover:bg": "hover:bg-red-200",
-      "hover:text": "hover:text-red-800"
+      "hover_bg": "hover:bg-red-200",
+      "hover_text": "hover:text-red-800"
     },
     "purple": {
       "bg": "bg-purple-50",
       "border": "border-purple-200",
       "text": "text-purple-900",
-      "hover:bg": "hover:bg-purple-200",
-      "hover:text": "hover:text-purple-800"
+      "hover_bg": "hover:bg-purple-200",
+      "hover_text": "hover:text-purple-800"
     },
     "pink": {
       "bg": "bg-pink-50",
       "border": "border-pink-200",
       "text": "text-pink-900",
-      "hover:bg": "hover:bg-pink-200",
-      "hover:text": "hover:text-pink-800"
+      "hover_bg": "hover:bg-pink-200",
+      "hover_text": "hover:text-pink-800"
     },
     "indigo": {
       "bg": "bg-indigo-50",
       "border": "border-indigo-200",
       "text": "text-indigo-900",
-      "hover:bg": "hover:bg-indigo-200",
-      "hover:text": "hover:text-indigo-800"
+      "hover_bg": "hover:bg-indigo-200",
+      "hover_text": "hover:text-indigo-800"
     },
     "yellow": {
       "bg": "bg-yellow-50",
       "border": "border-yellow-200",
       "text": "text-yellow-900",
-      "hover:bg": "hover:bg-yellow-200",
-      "hover:text": "hover:text-yellow-800"
+      "hover_bg": "hover:bg-yellow-200",
+      "hover_text": "hover:text-yellow-800"
     },
     "teal": {
       "bg": "bg-teal-50",
       "border": "border-teal-200",
       "text": "text-teal-900",
-      "hover:bg": "hover:bg-teal-200",
-      "hover:text": "hover:text-teal-800"
+      "hover_bg": "hover:bg-teal-200",
+      "hover_text": "hover:text-teal-800"
     },
     "cyan": {
       "bg": "bg-cyan-50",
       "border": "border-cyan-200",
       "text": "text-cyan-900",
-      "hover:bg": "hover:bg-cyan-200",
-      "hover:text": "hover:text-cyan-800"
+      "hover_bg": "hover:bg-cyan-200",
+      "hover_text": "hover:text-cyan-800"
     },
     "gray": {
       "bg": "bg-gray-50",
       "border": "border-gray-200",
       "text": "text-gray-900",
-      "hover:bg": "hover:bg-gray-200",
-      "hover:text": "hover:text-gray-800"
+      "hover_bg": "hover:bg-gray-200",
+      "hover_text": "hover:text-gray-800"
     },
     "slate": {
       "bg": "bg-slate-50",
       "border": "border-slate-200",
       "text": "text-slate-900",
-      "hover:bg": "hover:bg-slate-200",
-      "hover:text": "hover:text-slate-800"
+      "hover_bg": "hover:bg-slate-200",
+      "hover_text": "hover:text-slate-800"
     },
     "dark": {
       "bg": "bg-gray-900",
       "border": "border-gray-800",
       "text": "text-gray-100",
-      "hover:bg": "hover:bg-gray-800",
-      "hover:text": "hover:text-gray-100"
+      "hover_bg": "hover:bg-gray-800",
+      "hover_text": "hover:text-gray-100"
     },
     "light": {
       "bg": "bg-white",
       "border": "border-gray-200",
       "text": "text-gray-900",
-      "hover:bg": "hover:bg-gray-100",
-      "hover:text": "hover:text-gray-900"
+      "hover_bg": "hover:bg-gray-100",
+      "hover_text": "hover:text-gray-900"
     },
     "null": {
       "bg": "",
       "border": "",
       "text": "",
-      "hover:bg": "hover:bg-gray-100",
-      "hover:text": "hover:text-gray-900"
+      "hover_bg": "hover:bg-gray-100",
+      "hover_text": "hover:text-gray-900"
     }
   }
   return theme_scope.map((s) => {
@@ -174,6 +215,8 @@ export const useMarkdownProcessor = (
   theme_color: ThemeColor = "green",
   mermaid_theme: MermaidTheme = "default",
   mermaid_theme_CSS: string | undefined = undefined,
+  custom_color: CustomColor = {} as CustomColor,
+  custom_css: CustomCSS = {} as CustomCSS,
 ) => {
   useEffect(() => {
     mermaid.initialize({ startOnLoad: false, theme: mermaid_theme, themeCSS: mermaid_theme_CSS });
@@ -197,9 +240,9 @@ export const useMarkdownProcessor = (
               href={href}
               target="_blank"
               rel="noreferrer"
-              className={classNames(
+              className={custom_css.a_class.length > 0 ? custom_css.a_class : classNames(
                 ANCHOR_CLASS_NAME,
-                classNameByTheme(theme_color, ["text", "hover:text"])
+                classNameByTheme(theme_color, ["text", "hover_text"], custom_color),
               )}
             >
               {children}
@@ -207,9 +250,9 @@ export const useMarkdownProcessor = (
           ),
           h1: ({ children, id }: JSX.IntrinsicElements["h1"]) => (
             <h1
-              className={classNames(
+              className={custom_css.h1_class.length > 0 ? custom_css.h1_class : classNames(
                 "font-sans font-semibold text-2xl mb-6 mt-6",
-                classNameByTheme(theme_color, ["text"])
+                classNameByTheme(theme_color, ["text"], custom_color),
               )}
               id={id}
             >
@@ -218,9 +261,9 @@ export const useMarkdownProcessor = (
           ),
           h2: ({ children, id }: JSX.IntrinsicElements["h2"]) => (
             <h2
-              className={classNames(
+              className={custom_css.h2_class.length > 0 ? custom_css.h2_class : classNames(
                 "font-sans font-medium text-2xl mb-6 mt-6",
-                classNameByTheme(theme_color, ["text"])
+                classNameByTheme(theme_color, ["text"], custom_color),
               )}
               id={id}
             >
@@ -229,9 +272,9 @@ export const useMarkdownProcessor = (
           ),
           h3: ({ children, id }: JSX.IntrinsicElements["h3"]) => (
             <h3
-              className={classNames(
+              className={custom_css.h3_class.length > 0 ? custom_css.h3_class : classNames(
                 "font-sans font-semibold text-xl mb-6 mt-2",
-                classNameByTheme(theme_color, ["text"])
+                classNameByTheme(theme_color, ["text"], custom_color),
               )}
               id={id}
             >
@@ -240,9 +283,9 @@ export const useMarkdownProcessor = (
           ),
           h4: ({ children, id }: JSX.IntrinsicElements["h4"]) => (
             <h4
-              className={classNames(
+              className={custom_css.h4_class.length > 0 ? custom_css.td_class : classNames(
                 "font-sans font-medium text-xl my-6",
-                classNameByTheme(theme_color, ["text"])
+                classNameByTheme(theme_color, ["text"], custom_color),
               )}
               id={id}
             >
@@ -251,9 +294,9 @@ export const useMarkdownProcessor = (
           ),
           h5: ({ children, id }: JSX.IntrinsicElements["h5"]) => (
             <h5
-              className={classNames(
+              className={custom_css.h5_class.length > 0 ? custom_css.h5_class : classNames(
                 "font-sans font-semibold text-lg my-6",
-                classNameByTheme(theme_color, ["text"])
+                classNameByTheme(theme_color, ["text"], custom_color),
               )}
               id={id}
             >
@@ -262,9 +305,9 @@ export const useMarkdownProcessor = (
           ),
           h6: ({ children, id }: JSX.IntrinsicElements["h6"]) => (
             <h6
-              className={classNames(
+              className={custom_css.h6_class.length > 0 ? custom_css.h6_class : classNames(
                 "font-sans font-medium text-lg my-6",
-                classNameByTheme(theme_color, ["text"])
+                classNameByTheme(theme_color, ["text"], custom_color),
               )}
               id={id}
             >
@@ -273,32 +316,37 @@ export const useMarkdownProcessor = (
           ),
           p: (props: JSX.IntrinsicElements["p"]) => {
             return (
-              <p className={classNames(
+              <p className={custom_css.p_class.length > 0 ? custom_css.p_class : classNames(
                 "font-sans text-sm mb-6",
-                classNameByTheme(theme_color, ["text"])
+                classNameByTheme(theme_color, ["text"], custom_color),
               )}>
                 {props.children}
               </p>
             );
           },
           strong: ({ children }: JSX.IntrinsicElements["strong"]) => (
-            <strong className={classNames(
+            <strong className={custom_css.strong_class.length > 0 ? custom_css.strong_class : classNames(
               "font-semibold",
-              classNameByTheme(theme_color, ["text"])
+              classNameByTheme(theme_color, ["text"], custom_color),
             )}>
               {children}
             </strong>
           ),
           em: ({ children }: JSX.IntrinsicElements["em"]) => (
-            <em>{children}</em>
+            <em className={
+              custom_css.em_class.length > 0 ? custom_css.em_class : classNames(
+                "italic",
+                classNameByTheme(theme_color, ["text"], custom_color),
+              )
+            }>{children}</em>
           ),
-          code: ({ children, className }: JSX.IntrinsicElements["code"]) => CodeBlock({ children, className }, theme_color),
+          code: ({ children, className }: JSX.IntrinsicElements["code"]) => CodeBlock({ children, className }, theme_color, custom_color, custom_css),
           pre: ({ children }: JSX.IntrinsicElements["pre"]) => {
             return (
               <div className="relative mb-6">
-                <pre className={classNames(
+                <pre className={custom_css.pre_class.length > 0 ? custom_css.pre_class : classNames(
                   "p-4 rounded-lg border-2 [&>code.hljs]:p-0 [&>code.hljs]:bg-transparent font-code text-sm overflow-x-auto flex items-start",
-                  classNameByTheme(theme_color, ["border", "bg"])
+                  classNameByTheme(theme_color, ["border", "bg"], custom_color),
                 )}>
                   {children}
                 </pre>
@@ -306,9 +354,9 @@ export const useMarkdownProcessor = (
             );
           },
           ul: ({ children }: JSX.IntrinsicElements["ul"]) => (
-            <ul className={classNames(
+            <ul className={custom_css.ul_class.length > 0 ? custom_css.ul_class : classNames(
               "flex flex-col gap-3 my-6 pl-3 [&_ol]:my-3 [&_ul]:my-3",
-              classNameByTheme(theme_color, ["text"])
+              classNameByTheme(theme_color, ["text"], custom_color),
             )}>
               {Children.map(
                 flattenChildren(children).filter(isValidElement),
@@ -322,18 +370,18 @@ export const useMarkdownProcessor = (
             </ul>
           ),
           ol: ({ children }: JSX.IntrinsicElements["ol"]) => (
-            <ol className={classNames(
+            <ol className={custom_css.ol_class.length > 0 ? custom_css.ol_class : classNames(
               "flex flex-col gap-3 my-6 pl-3 [&_ol]:my-3 [&_ul]:my-3",
-              classNameByTheme(theme_color, ["text"])
+              classNameByTheme(theme_color, ["text"], custom_color),
             )}>
               {Children.map(
                 flattenChildren(children).filter(isValidElement),
                 (child, index) => (
                   <li key={index} className="flex gap-2 items-start">
                     <div
-                      className={classNames(
+                      className={custom_css.li_class.length > 0 ? custom_css.li_class : classNames(
                         "font-sans text-sm font-semibold shrink-0 min-w-[1.4ch]",
-                        classNameByTheme(theme_color, ["text"])
+                        classNameByTheme(theme_color, ["text"], custom_color),
                       )}
                       aria-hidden
                     >
@@ -346,43 +394,48 @@ export const useMarkdownProcessor = (
             </ol>
           ),
           li: ({ children }: JSX.IntrinsicElements["li"]) => (
-            <div className="font-sans text-sm">{children}</div>
+            <div className={
+              custom_css.li_class.length > 0 ? custom_css.li_class : classNames(
+                "font-sans text-sm",
+                classNameByTheme(theme_color, ["text"], custom_color),
+              )
+            }>{children}</div>
           ),
           table: ({ children }: JSX.IntrinsicElements["table"]) => (
             <div className="overflow-x-auto mb-6">
-              <table className={classNames(
+              <table className={custom_css.table_class.length > 0 ? custom_css.table_class : classNames(
                 "table-auto border-2",
-                classNameByTheme(theme_color, ["border"])
+                classNameByTheme(theme_color, ["border"], custom_color),
               )}>
                 {children}
               </table>
             </div>
           ),
           thead: ({ children }: JSX.IntrinsicElements["thead"]) => (
-            <thead className={classNames(
-              classNameByTheme(theme_color, ["bg"])
+            <thead className={custom_css.thead_class.length > 0 ? custom_css.thead_class : classNames(
+              classNameByTheme(theme_color, ["bg"], custom_color),
             )}>{children}</thead>
           ),
           th: ({ children }: JSX.IntrinsicElements["th"]) => (
-            <th className={classNames(
+            <th className={custom_css.th_class.length > 0 ? custom_css.th_class : classNames(
               "border-2 p-2 font-sans text-sm font-semibold",
-              classNameByTheme(theme_color, ["border", "text"])
+              classNameByTheme(theme_color, ["border", "text"], custom_color),
             )}>
               {children}
             </th>
           ),
           td: ({ children }: JSX.IntrinsicElements["td"]) => (
-            <td className={classNames(
+            <td className={custom_css.td_class.length > 0 ? custom_css.td_class : classNames(
               "border-2 p-2 font-sans text-sm",
-              classNameByTheme(theme_color, ["border", "text"])
+              classNameByTheme(theme_color, ["border", "text"], custom_color),
             )}>
               {children}
             </td>
           ),
           blockquote: ({ children }: JSX.IntrinsicElements["blockquote"]) => (
-            <blockquote className={classNames(
+            <blockquote className={custom_css.blockquote_class.length > 0 ? custom_css.blockquote_class : classNames(
               "border-l-4 pl-2 italic",
-              classNameByTheme(theme_color, ["border", "text"])
+              classNameByTheme(theme_color, ["border", "text"], custom_color),
             )}>
               {children}
             </blockquote>
@@ -393,7 +446,7 @@ export const useMarkdownProcessor = (
   }, [content, theme_color]);
 };
 
-const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme_color: ThemeColor = "green") => {
+const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme_color: ThemeColor = "green", custom_color: CustomColor, custom_css: CustomCSS) => {
   const isMermaid = className ? className.includes("language-mermaid") : false;
   const isLatex = className ? className.includes("language-latex") : false;
 
@@ -419,15 +472,15 @@ const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme
         {
           showLatexPreview ? (
             <div className={`flex-grow flex-shrink my-auto`}>
-              <Latex content={children?.toString() ?? ""} theme_color={theme_color} />
+              <Latex content={children?.toString() ?? ""} theme_color={theme_color} custom_color={custom_color} custom_css={custom_css}/>
             </div>
           ) : (
             showMermaidPreview ? (
               <div className={`flex-grow flex-shrink my-auto`}>
-                <Mermaid content={children?.toString() ?? ""} theme_color={theme_color} />
+                <Mermaid content={children?.toString() ?? ""} theme_color={theme_color} custom_color={custom_color} custom_css={custom_css}/>
               </div>
             ) : (
-              <code ref={ref} className={`${className} flex-grow flex-shrink my-auto`}>
+              <code ref={ref} className={custom_css.code_class.length > 0 ? custom_css.code_class : `${className} flex-grow flex-shrink my-auto`}>
                 {children}
               </code>
             )
@@ -439,7 +492,7 @@ const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme
             type="button"
             className={classNames(
               "rounded-md p-1 border-2 transition-colors",
-              classNameByTheme(theme_color, ["border", "text", "hover:bg"])
+              classNameByTheme(theme_color, ["border", "text", "hover_bg"], custom_color)
             )}
             aria-label="copy code to clipboard"
             title="Copy code to clipboard"
@@ -460,9 +513,9 @@ const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme
             <>
               <button
                 type="button"
-                className={classNames(
+                className={custom_css.code_button_class.length > 0 ? custom_css.code_button_class : classNames(
                   "rounded-md p-1 border-2 transition-colors",
-                  classNameByTheme(theme_color, ["border", "text", "hover:bg"])
+                  classNameByTheme(theme_color, ["border", "text", "hover_bg"], custom_color)
                 )}
                 aria-label={showMermaidPreview ? "Show Mermaid Code" : "Show Mermaid Diagram"}
                 title={showMermaidPreview ? "Show Mermaid Code" : "Show Mermaid Diagram"}
@@ -478,9 +531,9 @@ const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme
             <>
               <button
                 type="button"
-                className={classNames(
+                className={custom_css.code_button_class.length > 0 ? custom_css.code_button_class : classNames(
                   "rounded-md p-1 border-2 transition-colors",
-                  classNameByTheme(theme_color, ["border", "text", "hover:bg"])
+                  classNameByTheme(theme_color, ["border", "text", "hover_bg"], custom_color)
                 )}
                 aria-label={showLatexPreview ? "Show Latex Code" : "Show Latex Diagram"}
                 title={showLatexPreview ? "Show Latex Code" : "Show Latex Diagram"}
@@ -498,16 +551,16 @@ const CodeBlock = ({ children, className }: JSX.IntrinsicElements["code"], theme
   }
 
   return (
-    <code className={classNames(
+    <code className={custom_css.code_class.length > 0 ? custom_css.code_class : classNames(
       "inline-block font-code p-0.5 -my-0.5 rounded",
-      classNameByTheme(theme_color, ["text", "bg"])
+      classNameByTheme(theme_color, ["text", "bg"], custom_color)
     )}>
       {children}
     </code>
   );
 };
 
-const Latex = ({ content, theme_color = "green" }: { content: string, theme_color?: ThemeColor }) => {
+const Latex = ({ content, theme_color = "green", custom_color, custom_css }: { content: string, theme_color?: ThemeColor, custom_color: CustomColor, custom_css: CustomCSS }) => {
   const [diagram, setDiagram] = useState<string | boolean>(true);
 
   useEffect(() => {
@@ -527,7 +580,7 @@ const Latex = ({ content, theme_color = "green" }: { content: string, theme_colo
       <div className="flex gap-2 items-center">
         <CircleNotch className={classNames(
           "animate-spin w-4 h-4",
-          classNameByTheme(theme_color, ["text"])
+          classNameByTheme(theme_color, ["text"], custom_color)
         )} />
         <p className="font-sans text-sm text-slate-700">Rendering diagram...</p>
       </div>
@@ -539,11 +592,16 @@ const Latex = ({ content, theme_color = "green" }: { content: string, theme_colo
       </p>
     );
   } else {
-    return <div dangerouslySetInnerHTML={{ __html: diagram ?? "" }} />;
+    return <div className={
+      custom_css.code_latex_class.length > 0 ? custom_css.code_latex_class : classNames(
+        "font-sans text-sm",
+        classNameByTheme(theme_color, ["text"], custom_color),
+      )
+    } dangerouslySetInnerHTML={{ __html: diagram ?? "" }} />;
   }
 };
 
-const Mermaid = ({ content, theme_color = "green" }: { content: string, theme_color?: ThemeColor }) => {
+const Mermaid = ({ content, theme_color = "green", custom_color, custom_css }: { content: string, theme_color?: ThemeColor, custom_color: CustomColor, custom_css: CustomCSS }) => {
   const [diagram, setDiagram] = useState<string | boolean>(true);
 
   useEffect(() => {
@@ -568,7 +626,7 @@ const Mermaid = ({ content, theme_color = "green" }: { content: string, theme_co
       <div className="flex gap-2 items-center">
         <CircleNotch className={classNames(
           "animate-spin w-4 h-4",
-          classNameByTheme(theme_color, ["text"])
+          classNameByTheme(theme_color, ["text"], custom_color)
         )} />
         <p className="font-sans text-sm text-slate-700">Rendering diagram...</p>
       </div>
@@ -581,7 +639,7 @@ const Mermaid = ({ content, theme_color = "green" }: { content: string, theme_co
           href="https://mermaid.live/edit"
           className={classNames(
             ANCHOR_CLASS_NAME,
-            classNameByTheme(theme_color, ["text", "hover:text"])
+            classNameByTheme(theme_color, ["text", "hover_text"], custom_color)
           )}
           target="_blank"
         >
@@ -591,6 +649,11 @@ const Mermaid = ({ content, theme_color = "green" }: { content: string, theme_co
       </p>
     );
   } else {
-    return <div dangerouslySetInnerHTML={{ __html: diagram ?? "" }} />;
+    return <div className={
+      custom_css.code_mermaid_class.length > 0 ? custom_css.code_mermaid_class : classNames(
+        "font-sans text-sm",
+        classNameByTheme(theme_color, ["text"], custom_color),
+      )
+    } dangerouslySetInnerHTML={{ __html: diagram ?? "" }} />;
   }
 };
