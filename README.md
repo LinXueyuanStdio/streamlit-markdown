@@ -37,7 +37,7 @@ from streamlit_markdown import st_streaming_markdown
 markdown_text = "$ y = f(x)$"
 def token_stream():
     for token in markdown_text:
-        yeild token
+        yield token
 st_streaming_markdown(token_stream, key="token_stream") # key must be set to prevent re-rendering
 ```
 
@@ -51,11 +51,11 @@ def token_stream():
     import random
     for token in markdown_text:
         if random.rand() > 0.5:
-            yeild token
+            yield token
         else:
             def callable_token():
                 return token
-            yeild callable_token
+            yield callable_token
 st_streaming_markdown(token_stream, key="token_stream") # key must be set to prevent re-rendering
 ```
 
