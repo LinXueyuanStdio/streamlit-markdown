@@ -26,7 +26,7 @@ if _RELEASE:
 else:
     _markdown = components.declare_component(
         COMPONENT_NAME,
-        url="http://localhost:35335/component/streamlit_markdown.streamlit_markdown",
+        url="http://localhost:35335",
     )
 
 GLOBAL_THEME_COLOR = Literal["blue", "orange", "green", "red", "purple", "pink", "indigo", "yellow", "teal", "cyan", "gray", "slate", "dark", "light", "null", "custom"]
